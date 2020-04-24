@@ -17,6 +17,7 @@ namespace DBClasses
         public int MaxStorage { get; set; }
         public int Caught { get; set; }
         public int Quota { get; set; }
+        public int Class { get; set; }
 
         public List<string> CoordList { get; set; }
         public List<string> PortList { get; set; }
@@ -36,6 +37,7 @@ namespace DBClasses
             MaxStorage = 1000;
             Caught = 0;
             Quota = 5000;
+            Class = 1;
             IsFishing = false;
 
 
@@ -69,18 +71,19 @@ namespace DBClasses
             MaxFuel = 100;
             Profit = 0;
             Storage = 0;
-            MaxStorage = 5000;
+            MaxStorage = 1000;
             Caught = 0;
-            Quota = 1000;
+            Quota = 5000;
+            Class = 1;
         }
 
         public void SaveToDB(SQLiteConnection connection, string tablename)
         {
             SQLiteCommand cmnd = connection.CreateCommand();
             cmnd.CommandText = "INSERT INTO " + tablename
-                + " (id, coords, fuel, maxFuel, profit, caught, quota, storage, maxStorage) VALUES ('"
+                + " (id, coords, fuel, maxFuel, profit, caught, quota, storage, maxStorage, class) VALUES ('"
                 + VesselID + "', '" + Coords + "', " + Fuel + ", " + MaxFuel + ", " 
-                + Profit + ", " + Caught + ", " + Quota + ", " + Storage + ", " + MaxStorage + ")";
+                + Profit + ", " + Caught + ", " + Quota + ", " + Storage + ", " + MaxStorage + ", " + Class + ")";
             cmnd.ExecuteNonQuery();
         }
 
@@ -97,6 +100,7 @@ namespace DBClasses
                 + ", quota = " + Quota
                 + ", storage = " + Storage
                 + ", maxStorage = " + MaxStorage
+                + ", class = " + Class
                 + " WHERE id = '" + VesselID + "'";
             cmnd.ExecuteNonQuery();
         }
@@ -119,6 +123,7 @@ namespace DBClasses
                 Quota = int.Parse(reader[6].ToString());
                 Storage = int.Parse(reader[7].ToString());
                 MaxStorage = int.Parse(reader[8].ToString());
+                Class = int.Parse(reader[9].ToString());
 
                 //Debug.Log(Application.persistentDataPath);
             }
@@ -140,6 +145,154 @@ namespace DBClasses
                 Debug.Log("Vessel profit: " + reader[2].ToString());
                 Debug.Log("coords: " + reader[3].ToString());
                 Debug.Log(Application.persistentDataPath);
+            }
+        }
+
+        //this class is used when the player has selected the update boat button at a port
+        public void UpdateBoat()
+        {
+            int upgradePrice = 0;
+            // the age is checked, and if the user has enough money, they can upgrade their ship.
+            switch (Class)
+            {
+                case 1:
+                    upgradePrice = 5000;
+                    if(Profit >= upgradePrice)
+                    {
+                        MaxFuel = 125;
+                        MaxStorage = 5000;
+                        Quota = 20000;
+                        Class = 2;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 2:
+                    upgradePrice = 10000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 150;
+                        MaxStorage = 10000;
+                        Quota = 50000;
+                        Class = 3;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 3:
+                    upgradePrice = 20000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 175;
+                        MaxStorage = 25000;
+                        Quota = 100000;
+                        Class = 4;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 4:
+                    upgradePrice = 50000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 200;
+                        MaxStorage = 50000;
+                        Quota = 500000;
+                        Class = 5;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 5:
+                    upgradePrice = 100000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 250;
+                        MaxStorage = 100000;
+                        Quota = 1000000;
+                        Class = 6;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 6:
+                    upgradePrice = 500000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 300;
+                        MaxStorage = 500000;
+                        Quota = 5000000;
+                        Class = 7;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 7:
+                    upgradePrice = 1000000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 500;
+                        MaxStorage = 1000000;
+                        Quota = 10000000;
+                        Class = 8;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 8:
+                    upgradePrice = 5000000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 750;
+                        MaxStorage = 5000000;
+                        Quota = 50000000;
+                        Class = 9;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                case 9:
+                    upgradePrice = 5000000;
+                    if (Profit >= upgradePrice)
+                    {
+                        MaxFuel = 1000;
+                        MaxStorage = 10000000;
+                        Quota = 100000000;
+                        Class = 10;
+                        Profit -= upgradePrice;
+                    }
+                    else
+                    {
+                        Debug.Log("Not Enough Money For Upgrade");
+                    }
+                    break;
+                default:
+                    Debug.Log("Cannot further update vessel.");
+                    break;
             }
         }
 

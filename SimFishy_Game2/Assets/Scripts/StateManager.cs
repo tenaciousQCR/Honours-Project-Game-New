@@ -317,6 +317,20 @@ public class StateManager : MonoBehaviour
         }
     }
 
+    // if any age group becomes negative, they are set to zero
+    public void NegativeWipe()
+    {
+        int count = 0;
+        foreach(int i in AgePopList)
+        {
+            if (i < 0)
+            {
+                AgePopList[count] = 0;
+            }
+            count++;
+        }
+    }
+
     public void ActivateMonthPopup()
     {
 
@@ -456,6 +470,8 @@ public class StateManager : MonoBehaviour
         RestPopText.text = AgePopList[6].ToString();
 
         ConservationStatus(totalPop);
+
+        NegativeWipe();
     }
 
     public void ConservationStatus(int totalPopulation)
@@ -475,19 +491,24 @@ public class StateManager : MonoBehaviour
             ConservationTitle.text = "VU";
             ConservationText.text = "Vulnerable";
         }
-        else if (totalPopulation > 100000)
+        else if (totalPopulation > 500000)
         {
             ConservationTitle.text = "EN";
             ConservationText.text = "Endangered";
         }
-        else if (totalPopulation > 1000)
+        else if (totalPopulation > 100000)
         {
             ConservationTitle.text = "CR";
             ConservationText.text = "Critically Endangered";
         }
+        else if (totalPopulation > 50000)
+        {
+            ConservationTitle.text = "EW";
+            ConservationText.text = "Extinct in The Wild";
+        }
         else
         {
-            ConservationTitle.text = "E";
+            ConservationTitle.text = "EX";
             ConservationText.text = "Considered Exctinct";
         }
     }

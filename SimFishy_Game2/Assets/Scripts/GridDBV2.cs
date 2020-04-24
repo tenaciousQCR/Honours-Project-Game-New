@@ -27,6 +27,7 @@ public class GridDBV2 : MonoBehaviour
 
     //vessel text
     public Text vesselIDText;
+    public Text vesselClassText;
     public Text vesselFuelText;
     public Text vesselMaxFuelText;
     public Text vesselProfitText;
@@ -38,6 +39,7 @@ public class GridDBV2 : MonoBehaviour
     //port buttons
     public Button refuelBtn;
     public Button sellBtn;
+    public Button upgradeBtn;
 
     //menu buttons
     public Button resetBtn;
@@ -102,6 +104,8 @@ public class GridDBV2 : MonoBehaviour
         //button functions
         sellBtn.onClick.AddListener(sellBtnOnClick);
         refuelBtn.onClick.AddListener(refuelBtnOnClick);
+        upgradeBtn.onClick.AddListener(upgradeBtnOnClick);
+
         rescueBtn.onClick.AddListener(rescueBtnOnClick);
 
         resetBtn.onClick.AddListener(resetBtnOnClick);
@@ -230,6 +234,11 @@ public class GridDBV2 : MonoBehaviour
             testBoat.Fuel = testBoat.MaxFuel;
         }
     }
+    public void upgradeBtnOnClick()
+    {
+        testBoat.UpdateBoat();
+    }
+
 
     public void rescueBtnOnClick()
     {
@@ -336,11 +345,11 @@ public class GridDBV2 : MonoBehaviour
         for (int i = 0; i < catchSize; i++)
         {
             randomNum = random.Next(10);
-            //take from age 1
-            if (randomNum > 4)
+            //take from age 1 only if there is enough storage, and fish left
+            if (randomNum > 3)
             {
                 newWeight = GetRandomWeight(1);
-                if (remainingStorage >= newWeight)
+                if (remainingStorage >= newWeight && GameState.AgePopList[0]>0)
                 {
                     testBoat.Storage += newWeight;
                     age1++;
@@ -350,7 +359,7 @@ public class GridDBV2 : MonoBehaviour
             else if (randomNum > 0)
             {
                 newWeight = GetRandomWeight(1);
-                if (remainingStorage >= newWeight)
+                if (remainingStorage >= newWeight && GameState.AgePopList[0] > 0)
                 {
                     testBoat.Storage += newWeight;
                     age2++;
@@ -360,7 +369,7 @@ public class GridDBV2 : MonoBehaviour
             else
             {
                 newWeight = GetRandomWeight(1);
-                if (remainingStorage >= newWeight)
+                if (remainingStorage >= newWeight && GameState.AgePopList[0] > 0)
                 {
                     testBoat.Storage += newWeight;
                     age3++;
@@ -419,6 +428,10 @@ public class GridDBV2 : MonoBehaviour
         {
             totalPop += i;
         }
+
+        //this number is used to work out the fishing ratio
+        totalPop -= GameState.AgePopList[0];
+        totalPop -= GameState.AgePopList[1];
 
         //work out what percent of fish are this age
         decimal fishPercent = ((decimal)ageNumber / (decimal)totalPop);
@@ -483,6 +496,7 @@ public class GridDBV2 : MonoBehaviour
     {
         //updating vessels
         vesselIDText.text = "ID: " + testBoat.VesselID;
+        vesselClassText.text = "Class: " + (testBoat.Class).ToString();
         vesselFuelText.text = "Fuel: " + (testBoat.Fuel).ToString();
         vesselMaxFuelText.text = "/ " + (testBoat.MaxFuel).ToString();
         vesselProfitText.text = "Profit: " + (testBoat.Profit).ToString();
