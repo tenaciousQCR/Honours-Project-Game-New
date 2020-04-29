@@ -123,6 +123,8 @@ public class GridDBV2 : MonoBehaviour
         //load game
         LoadGame();
 
+        lastMonth = (int)GameState.month;
+
         //updating shoal list
         //shoalList.Add(testShoal1);
         //shoalList.Add(testShoal2);
@@ -359,7 +361,7 @@ public class GridDBV2 : MonoBehaviour
             else if (randomNum > 0)
             {
                 newWeight = GetRandomWeight(1);
-                if (remainingStorage >= newWeight && GameState.AgePopList[0] > 0)
+                if (remainingStorage >= newWeight && GameState.AgePopList[1] > 0)
                 {
                     testBoat.Storage += newWeight;
                     age2++;
@@ -369,7 +371,7 @@ public class GridDBV2 : MonoBehaviour
             else
             {
                 newWeight = GetRandomWeight(1);
-                if (remainingStorage >= newWeight && GameState.AgePopList[0] > 0)
+                if (remainingStorage >= newWeight && GameState.AgePopList[2] > 0)
                 {
                     testBoat.Storage += newWeight;
                     age3++;
@@ -515,11 +517,12 @@ public class GridDBV2 : MonoBehaviour
         }
 
         //if it is a new month
-        if(GameState.timeStart == 0 && GameState.day == 1)
+        if((int)GameState.month != lastMonth)
         {
             // reset quota and boat location
             testBoat.Caught = 0;
             testBoat.Coords = "0208";
+            lastMonth = (int)GameState.month;
         }
 
         // if the boat is stranded
